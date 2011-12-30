@@ -3,12 +3,26 @@
 """
     Simple webapp2 piratepad-like rest editor with PDF exporting capabilities.
 """
-
+from google.appengine.ext import db
 import webapp2, jinja2, os
 
-jinja_environment = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__),
-        'Templates')))
+jinja_environment = jinja2.Environment( loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'Templates')))
+
+class Pad(db.Model):
+    """
+        Collection of pad_revision objects
+    """
+
+    pad_name = db.StringProperty()
+
+class PadRevision(db.Model):
+    """
+        Single revision of a pad
+        Identifies itself to pad as pad.revisions.
+    """
+    pad_text = db.StringProperty()
+    pad_date = db.DateProperty()
+    pad = db.ReferenceProperty(Pad, collection_name = 'revisions')
 
 def get_template(template):
     """
@@ -29,14 +43,14 @@ class PadHandler(webapp2.RequestHandler):
             @returns: None
 
             Renders a template
-            
+
         """
         self.response.out.write(get_template(template).render(values))
 
     def filter_name(self, name):
         """
             @param name: name to return filtered
-            @type name: string            
+            @type name: string
             @returns: string
 
             Filters out special characters from a name
@@ -55,7 +69,7 @@ class PadHandler(webapp2.RequestHandler):
             @param revision: revision number of the pad
             @type revision: int
         """
-        return name # TODO
+        return Pad.gql('name=\'%s\'' %(name)).get()
 
 class MainPage(object):
     """
@@ -72,9 +86,9 @@ class MainPage(object):
                 @returns None
                 Prints the pad template rendered with a created new <pad> message
             """
-            template('pad.html', {
-                'body': body,
-                'messages': 'Created new pad %s' %(filter_name(name)})
+            self.template('pad.html', {
+                'body': 'New pad %s\n======================',
+                'messages': 'Created new pad %s' %(filter_name(name))})
 
     class GetRestPad(PadHandler):
         """
@@ -82,11 +96,13 @@ class MainPage(object):
         """
         def get(self, name):
             """
+                Gets pad body, renders template.
+                If no path body present redirects to /new/padname
             """
-            body = self.get_pad(name)
-            if body:
-                template('pad.html', {'body': body, 'messages': None})
-            else:
+            try:
+                body = self.get_pad(name).body
+                self.template('pad.html', {'body': body, 'messages': None})
+            except:
                 self.redirect('/new/%s', name)
 
     def SaveRestPad(PadHandler):
@@ -94,11 +110,13 @@ class MainPage(object):
             Save a rest pad revision.
         """
         def get(self, name):
-            return #TODO save it (remember that it will just create a new revision)
+            PadRevision(pad = self.get_pad(name))
+            self.redirect('/pad/%s' %(name))
 
     def ListRevisions(PadHandler):
         def get(self, name):
-            return name # TODO: return revisions on a specific template.
+            for pad in self.get_pad(name).revisions:
+                self.out.write("<li>%s - %s</li>" %(pad.name, pad.date))
 
     class GetPdfPad(PadHandler):
         def get(self, name):
