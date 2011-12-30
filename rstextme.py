@@ -2,9 +2,13 @@
 
 """
     Simple webapp2 piratepad-like rest editor with PDF exporting capabilities.
+    TODO: This still does not save anything in database.
+    TODO: Make the templates
+    TODO: Make the rst2pdf stuff.
 """
 from google.appengine.ext import db
-import webapp2, jinja2, os
+import webapp2, jinja2, os, logging
+from google.appengine.ext.webapp.util import run_wsgi_app
 
 jinja_environment = jinja2.Environment( loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'Templates')))
 
@@ -20,7 +24,7 @@ class PadRevision(db.Model):
         Single revision of a pad
         Identifies itself to pad as pad.revisions.
     """
-    pad_text = db.StringProperty()
+    pad_text = db.StringProperty(multiline = True)
     pad_date = db.DateProperty()
     pad = db.ReferenceProperty(Pad, collection_name = 'revisions')
 
@@ -69,68 +73,87 @@ class PadHandler(webapp2.RequestHandler):
             @param revision: revision number of the pad
             @type revision: int
         """
-        return Pad.gql('name=\'%s\'' %(name)).get()
+        parent_pad = Pad.gql('where name=:1', name).get()
+        logging.info(parent_pad)
+        if revision: return parent_pad.revisions[revision]
 
-class MainPage(object):
+class NewRestPad(PadHandler):
     """
-        Main handler, will subclass all stuff for clarity (not really needed)
+        Create new pad on database
     """
-    class NewRestPad(PadHandler):
+    def get(self, name):
         """
-            Create new pad on database
+            @param name: template name (and therefore id) to load
+            @type name: string
+            @returns None
+            Prints the pad template rendered with a created new <pad> message
+            TODO: This might cause collisions between users.
+                 But it will be rare so it's ok right now
         """
-        def get(self, name):
-            """
-                @param name: template name (and therefore id) to load
-                @type name: string
-                @returns None
-                Prints the pad template rendered with a created new <pad> message
-            """
-            self.template('pad.html', {
-                'body': 'New pad %s\n======================',
-                'messages': 'Created new pad %s' %(filter_name(name))})
+        logging.info(name)
+        logging.info('Creating new template %s', name)
+        try:
+            pad = self.get_pad(name)
+            if not pad:
+                raise Exception("None")
+        except:
+            pad = Pad(name = name)
+        pad.put()
+        revision = PadRevision(pad_name = pad)
+        revision.put()
+        revision.pad_text = "New pad %s\n ======================"\
+             %(self.filter_name(name))
+        self.redirect('/pad/' + name)
 
-    class GetRestPad(PadHandler):
+class GetRestPad(PadHandler):
+    """
+       Return an existing pad
+    """
+    def get(self, name, revision=False):
         """
-            Return an existing pad
+            Gets pad body, renders template.
+            If no path body present redirects to /new/padname
         """
-        def get(self, name):
-            """
-                Gets pad body, renders template.
-                If no path body present redirects to /new/padname
-            """
-            try:
-                body = self.get_pad(name).body
-                self.template('pad.html', {'body': body, 'messages': None})
-            except:
-                self.redirect('/new/%s', name)
+        try:
+            body = self.get_pad(name, revision).pad_text
+            self.template('pad.html', {'body': body, 'messages': None})
+        except Exception, err:
+            logging.info(err)
+            # self.redirect('/new/%s', name)
 
-    def SaveRestPad(PadHandler):
+class SaveRestPad(PadHandler):
+    """
+        Save a rest pad revision.
+    """
+    def get(self, name):
+        PadRevision(pad = self.get_pad(name)) # Get lastest
+        #self.redirect('/pad/%s' %(name))
+
+class ListRevisions(PadHandler):
+    def get(self, name):
         """
-            Save a rest pad revision.
+            Returns an unordered list of revisions of a pad.
         """
-        def get(self, name):
-            PadRevision(pad = self.get_pad(name))
-            self.redirect('/pad/%s' %(name))
+        self.out.write("<ul>")
+        for pad in self.get_pad(name).revisions:
+            self.out.write("<li>%s - %s</li>" %(pad.name, pad.date))
+        self.out.write("</ul>")
 
-    def ListRevisions(PadHandler):
-        def get(self, name):
-            for pad in self.get_pad(name).revisions:
-                self.out.write("<li>%s - %s</li>" %(pad.name, pad.date))
+class GetPdfPad(PadHandler):
+    def get(self, name):
+        self.response.headers['content-type'] = 'application/pdf'
+        self.response.out.write(self.pdfy(name))
 
-    class GetPdfPad(PadHandler):
-        def get(self, name):
-            self.response.headers['content-type'] = 'application/pdf'
-            self.response.out.write(self.pdfy(name))
+    def pdfy(self, name):
+        return # TODO
 
-        def pdfy(self, name):
-            return # TODO
-
-app = webapp2.WSGIApplication(
+run_wsgi_app(webapp2.WSGIApplication(
     [
-        ('/new/(.*)', MainPage.NewRestPad),
-        ('/pad/(.*)', MainPage.GetRestPad),
-        ('/pdf/(.*)', MainPage.GetPdfPad)
+        ('/new/(.*)', NewRestPad),
+        ('/pad/(.*)', GetRestPad),
+        ('/save/(.*)', SaveRestPad),
+        ('/pad_revisions/(.*)', ListRevisions),
+        ('/pdf/(.*)', GetPdfPad)
     ],
-    debug=True)
+    debug=True))
 
