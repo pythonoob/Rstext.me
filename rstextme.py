@@ -73,9 +73,11 @@ class PadHandler(webapp2.RequestHandler):
             @param revision: revision number of the pad
             @type revision: int
         """
-        parent_pad = Pad.gql('where name=:1', name).get()
-        logging.info(parent_pad)
+        parent_pad = Pad.gql('where pad_name=:1', name).get()
         if revision: return parent_pad.revisions[revision]
+        else:
+            for i in parent_pad.revisions:
+                return i
 
 class NewRestPad(PadHandler):
     """
@@ -96,13 +98,15 @@ class NewRestPad(PadHandler):
             pad = self.get_pad(name)
             if not pad:
                 raise Exception("None")
-        except:
-            pad = Pad(name = name)
+        except Exception, e:
+            pad = Pad(pad_name = name)
         pad.put()
         revision = PadRevision(pad_name = pad)
-        revision.put()
         revision.pad_text = "New pad %s\n ======================"\
              %(self.filter_name(name))
+        logging.debug(pad.revisions.get())
+        revision.put()
+
         self.redirect('/pad/' + name)
 
 class GetRestPad(PadHandler):
@@ -115,6 +119,7 @@ class GetRestPad(PadHandler):
             If no path body present redirects to /new/padname
         """
         try:
+            logging.info(self.get_pad(name))
             body = self.get_pad(name, revision).pad_text
             self.template('pad.html', {'body': body, 'messages': None})
         except Exception, err:
