@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
             <form action="/save/{{pad_id}}">
-                <textarea>{{ body }}</textarea><br/>
+                <textarea id="text" name="text">{{ body }}</textarea><br/>
                 <input type="submit" value="Save" />
             </form>
             <a href="/pad_revisions/{{pad_id}}"> See all revisions </a>

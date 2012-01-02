@@ -79,19 +79,19 @@ class PadHandler(webapp2.RequestHandler):
 
         try:
             parent_pad = Pad.gql('where pad_name=:1', name).get()
+            if not parent_pad:
+                raise Exception("No pad found for %s" %(name))
             if not get_revision:
                 return parent_pad
-            revisions = parent_pad.revisions.get()
-        except:
-            return False            
+
+        except Exception, error:
+            logging.info(error)
+            return Pad(pad_name = name)
 
         if revision:
-            return revisions[revision]
+            return PadRevision.get_by_id(revision)
         else:
-            try:
-                return revisions[-1]
-            except:
-                return revisions
+            return parent_pad.revisions.order('pad_date').get()
 
 class NewRestPad(PadHandler):
     """
@@ -108,11 +108,7 @@ class NewRestPad(PadHandler):
         """
 
         pad = self.get_pad(name)
-
-        if not pad:
-            logging.debug('Pad does not exist. Making one')
-            pad = Pad(pad_name = name)
-            pad.put()
+        pad.put() # Update pad.
 
         revision = PadRevision(pad = pad.key())
         revision.pad_text = "New pad %s\n ======================"\
@@ -158,6 +154,9 @@ class SaveRestPad(PadHandler):
     def get(self, name):
         pad = self.get_pad(name, get_revision = False)
         revision = PadRevision(pad = pad)
+        revision.pad_text = self.request.get('text')
+        logging.info("XXXXXXXXXXX")
+        logging.info(revision.pad_text)
         revision.put()
         self.redirect('/pad/' + name + "/" + str(revision.key().id() ))
 
