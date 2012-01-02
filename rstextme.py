@@ -7,8 +7,19 @@
 from google.appengine.ext import db
 from google.appengine.api import users
 import webapp2, jinja2, os, logging, cgi
+from docutils import core
+from docutils.core import publish_parts
 from datetime import datetime
 from google.appengine.ext.webapp.util import run_wsgi_app
+
+providers = {
+    'Google'   : 'www.google.com/accounts/o8/id', # shorter alternative: "Gmail.com"
+    'Yahoo'    : 'yahoo.com',
+    'MySpace'  : 'myspace.com',
+    'AOL'      : 'aol.com',
+    'MyOpenID' : 'myopenid.com'
+    # add more here
+}
 
 class Pad(db.Model):
     """
@@ -23,7 +34,7 @@ class PadRevision(db.Model):
         Single revision of a pad
         Identifies itself to pad as pad.revisions.
     """
-    pad_text = db.StringProperty(multiline = True)
+    pad_text = db.TextProperty()
     pad_date = db.DateTimeProperty(auto_now=True)
     pad = db.ReferenceProperty(Pad, collection_name = 'revisions')
 
@@ -50,7 +61,6 @@ class PadHandler(webapp2.RequestHandler):
             @returns: None
 
             Renders a template
-
         """
         self.response.out.write(get_template(template).render(values))
 
@@ -96,6 +106,24 @@ class PadHandler(webapp2.RequestHandler):
         else:
             return parent_pad.revisions.order('-pad_date').get()
 
+    def format_(self, name, writter):
+        os.environ['DOCUTILSCONFIG'] = ''
+        messages = None
+
+        try:
+            parts = publish_parts(source = self.get_pad(name).pad_text,
+                writer_name = writter,
+                settings_overrides={'style':'colorful', 'config': None})
+            return parts['whole'] # TODO Still not working
+        except Exception, error:
+            try:
+                body = self.get_pad(name).pad_text
+            except:
+                body = ""
+            self.template('pad.html', {
+                 'body': body, 'messages': error, 'pad_id':name,
+                  'pad_name':name.replace('_', ' ')})
+
 class NewRestPad(PadHandler):
     """
         Create new pad on database
@@ -111,14 +139,17 @@ class NewRestPad(PadHandler):
         """
 
         pad = self.get_pad(name)
-        is_private = self.request.get('private')
-        if is_private == "":
+        is_private = self.request.get('is_private')
+        if is_private != "":
             is_private = True
+        else:
+            is_private = False
         pad.is_private = is_private
+        pad.user = users.get_current_user()
         pad.put() # Update pad.
 
         revision = PadRevision(pad = pad.key())
-        revision.pad_text = "New pad %s\n ======================"\
+        revision.pad_text = "New pad %s\n======================"\
              %(self.filter_name(name))
         revision.put()
         logging.debug("Created new pad, redirecting.")
@@ -143,22 +174,23 @@ class GetRestPad(PadHandler):
             Gets pad body, renders template.
             If no path body present redirects to /new/padname
         """
-
-        pad = self.get_pad(name, revision)
+        pad = self.get_pad(name, int(revision))
         parent_pad = self.get_pad(name, get_revision = False)
         if parent_pad.is_private and\
                 not parent_pad.user == users.get_current_user():
+            logging.info("You cant access this pad")
             self.template('pad.html', {
-                messages: 'You don\'t have access to this pad' })
-            return 
+                'messages': 'You don\'t have access to this pad' })
+            return
         try:
             self.template('pad.html', {
-                 'body': pad.pad_text, 'messages': None, 'pad_id':name,
-                 'pad_name':name.replace('_', ' ')})
+                'pad_owner': parent_pad.user,
+                'pad_private' : parent_pad.is_private,
+                'body': pad.pad_text,
+                'messages': None, 'pad_id':name,
+                'pad_name':name.replace('_', ' ')})
 
         except Exception, err:
-            logging.debug("Something happend getting pad. Creating one")
-            logging.debug(err)
             self.redirect('/new/' + name)
 
 class SaveRestPad(PadHandler):
@@ -166,10 +198,12 @@ class SaveRestPad(PadHandler):
         Save a rest pad revision.
     """
     def post(self, name):
-        if pad.is_private and not pad.user == users.get_current_user():
+        parent_pad = self.get_pad(name, get_revision = False)
+        if parent_pad.is_private and\
+                not parent_pad.user == users.get_current_user():
             self.template('pad.html', {
-                messages: 'You don\'t have access to this pad' })
-            return 
+                'messages': 'You don\'t have access to this pad' })
+            return
         pad = self.get_pad(name, get_revision = False)
         revision = PadRevision(pad = pad)
         revision.pad_text = self.request.get('text')
@@ -188,26 +222,13 @@ class ListRevisions(PadHandler):
         self.template('pad_list.html', {'body': body,
             'messages': "Warning: This information may be changing right now"})
 
+class GetS5Pad(PadHandler):
+    def get(self, name):
+        self.response.out.write(self.format_(name, 's5_html'))
+
 class GetHtmlPad(PadHandler):
     def get(self, name):
-        self.response.out.write(self.htmlfy(name))
-
-    def htmlfy(self, name):
-        from docutils import core
-        from docutils.core import publish_parts
-        os.environ['DOCUTILSCONFIG'] = ''
-        messages = None
-
-        try:
-            parts = publish_parts(source = self.get_pad(name).pad_text,
-                writer_name = 'html4css1',
-                settings_overrides={'style':'colorful', 'config': None})
-            return parts['whole'] # TODO Still not working
-        except Exception, error:
-            body = self.get_pad(name).pad_text
-            self.template('pad.html', {
-                 'body': body, 'messages': error, 'pad_id':name,
-                 'pad_name':name.replace('_', ' ')})
+        self.response.out.write(self.format_(name, 'html4css1'))
 
 class GetPdfPad(PadHandler):
     def get(self, name):
@@ -219,7 +240,11 @@ class GetPdfPad(PadHandler):
 
 class Landing(PadHandler):
     def get(self):
-        self.template('index.html', {})
+        body = "<ul style='list-style:none'>"
+        for name, uri in providers.items():
+            body += '<li><a href="%s">%s</a></li>' % (
+                users.create_login_url(federated_identity=uri), name)
+        self.template('index.html', {'body': body + "</ul>"})
 
 if __name__ == "__main__":
     jinja_loader = jinja2.FileSystemLoader(
@@ -233,10 +258,11 @@ if __name__ == "__main__":
             ('/pad/(.*)', GetRestPad),
             ('/pdf/(.*)', GetPdfPad),
             ('/html/(.*)', GetHtmlPad),
+            ('/s5/(.*)', GetS5Pad),
             ('/new/(.*)', NewRestPad),
             ('/save/(.*)', SaveRestPad),
             ('/list', ListAllPads),
             ('/pad_revisions/(.*)', ListRevisions),
-    
+
         ],
         debug=True))

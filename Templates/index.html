@@ -1,7 +1,28 @@
 {%extends 'base.html'%}
+{%block header%}
+    <script type="text/javascript">
+        function create_pad(){
+            console.debug($('#padname').val() + "?is_private=" + $('#private').val());
+             window.location="/new/" + $('#padname').val() + "?is_private=" + $('.private').val();
+        }
+    </script>
+{%endblock%}
+
 {%block body%}
 <ul style="list-style:none">
     <li><a href="/list">List all pads</a></li>
-    <li><label for="padname"><a onclick="window.location=\"/new/\" + $('.padname');return false;" href="#"> Create new pad </a></label><input type="text" name="padname" id="padname" /></li>
+    <li>
+        <form action="#" onsubmit="create_pad(); return false;">
+            <ul style="list-style:none"><li>
+                <label for="padname">Create new pad</label>
+                <input type="text" name="padname" id="padname" />
+            </li><li>
+                <label for="private"> Mark as private </label>
+                <input type="checkbox" name="private" id="private" value="true" />
+            </li></ul>
+            <input type="submit" />
+        </form>
+    </li>
 </ul>
+{{ body }}
 {%endblock%}

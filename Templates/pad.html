@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% block body %}
+    {% if pad_owner and pad_private %} <div class="notice"><p> This pad is private for {{ pad_owner }} </p></div> {%endif%}
     <form action="/save/{{pad_id}}" method="post">
         <textarea id="text" name="text">{{ body }}</textarea><br/>
         <input type="submit" value="Save" />
     </form>
     <ul class="pad_options">
-        <li><a href="/html/{{pad_id}}"> Render HTML </a></li>
+        <li><a target="_rendered{{pad_id}}" href="/html/{{pad_id}}"> Render HTML </a></li>
+        <li><a target="_rendered{{pad_id}}" href="/s5/{{pad_id}}"> Create presentation </a></li>
         <li><a href="/pad_revisions/{{pad_id}}"> See all revisions </a></li>
     </ul>
 {% endblock %}
