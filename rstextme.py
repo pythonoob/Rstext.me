@@ -172,6 +172,27 @@ class ListRevisions(PadHandler):
         self.template('pad_list.html', {'body': body,
             'messages': "Warning: This information may be changing right now"})
 
+class GetHtmlPad(PadHandler):
+    def get(self, name):
+        self.response.out.write(self.htmlfy(name))
+
+    def htmlfy(self, name):
+        from docutils import core
+        from docutils.core import publish_parts
+        os.environ['DOCUTILSCONFIG'] = ''
+        messages = None
+
+        try:
+            parts = publish_parts(source = self.get_pad(name).pad_text,
+                writer_name = 'html4css1',
+                settings_overrides={'style':'colorful', 'config': None})
+            return parts['fragment'] # TODO Still not working
+        except Exception, error:
+            body = self.get_pad(name).pad_text
+            self.template('pad.html', {
+                 'body': body, 'messages': error, 'pad_id':name,
+                 'pad_name':name.replace('_', ' ')})
+
 class GetPdfPad(PadHandler):
     def get(self, name):
         self.response.headers['content-type'] = 'application/pdf'
@@ -195,6 +216,7 @@ if __name__ == "__main__":
             ('/', Landing),
             ('/pad/(.*)', GetRestPad),
             ('/pdf/(.*)', GetPdfPad),
+            ('/html/(.*)', GetHtmlPad),
             ('/new/(.*)', NewRestPad),
             ('/save/(.*)', SaveRestPad),
             ('/list', ListAllPads),
