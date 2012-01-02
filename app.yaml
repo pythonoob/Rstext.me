@@ -11,3 +11,9 @@ libraries:
 handlers:
 - url: /.*
   script: rstextme.py
+
+- url: /css
+  static_dir: css
+
+- url: /js
+  static_dir: js

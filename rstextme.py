@@ -2,12 +2,11 @@
 
 """
     Simple webapp2 piratepad-like rest editor with PDF exporting capabilities.
-    TODO: This still does not save anything in database.
     TODO: Make the templates
     TODO: Make the rst2pdf stuff.
 """
 from google.appengine.ext import db
-import webapp2, jinja2, os, logging
+import webapp2, jinja2, os, logging, cgi
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 jinja_environment = jinja2.Environment( loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'Templates')))
@@ -63,7 +62,10 @@ class PadHandler(webapp2.RequestHandler):
             foo_bar_baz+stuff
 
         """
-        return name # TODO
+        return cgi.escape(name.replace(' ', '_'))
+
+    def list_pads(self):
+        return Pad.gql('').get()
 
     def get_pad(self, name, revision=False):
         """
@@ -73,11 +75,20 @@ class PadHandler(webapp2.RequestHandler):
             @param revision: revision number of the pad
             @type revision: int
         """
-        parent_pad = Pad.gql('where pad_name=:1', name).get()
-        if revision: return parent_pad.revisions[revision]
+
+        try:
+            parent_pad = Pad.gql('where pad_name=:1', name).get()
+            revisions = parent_pad.revisions.get()
+        except:
+            return False            
+
+        if revision:
+            return revisions[revision]
         else:
-            for i in parent_pad.revisions:
-                return i
+            try:
+                return revisions[-1]
+            except:
+                return revisions
 
 class NewRestPad(PadHandler):
     """
@@ -92,22 +103,27 @@ class NewRestPad(PadHandler):
             TODO: This might cause collisions between users.
                  But it will be rare so it's ok right now
         """
-        logging.info(name)
-        logging.info('Creating new template %s', name)
-        try:
-            pad = self.get_pad(name)
-            if not pad:
-                raise Exception("None")
-        except Exception, e:
+
+        pad = self.get_pad(name)
+
+        if not pad:
+            logging.debug('Pad does not exist. Making one')
             pad = Pad(pad_name = name)
-        pad.put()
-        revision = PadRevision(pad_name = pad)
+            pad.put()
+
+        revision = PadRevision(pad = pad.key())
         revision.pad_text = "New pad %s\n ======================"\
              %(self.filter_name(name))
-        logging.debug(pad.revisions.get())
         revision.put()
 
         self.redirect('/pad/' + name)
+
+class ListAllPads(PadHandler):
+    """
+        Get a list of all created pads (like a TOC)
+    """
+    def get(self):
+        self.response.out.write(self.list_pads())
 
 class GetRestPad(PadHandler):
     """
@@ -119,12 +135,10 @@ class GetRestPad(PadHandler):
             If no path body present redirects to /new/padname
         """
         try:
-            logging.info(self.get_pad(name))
             body = self.get_pad(name, revision).pad_text
             self.template('pad.html', {'body': body, 'messages': None})
         except Exception, err:
-            logging.info(err)
-            # self.redirect('/new/%s', name)
+            self.redirect('/new/%s', name)
 
 class SaveRestPad(PadHandler):
     """
@@ -154,11 +168,13 @@ class GetPdfPad(PadHandler):
 
 run_wsgi_app(webapp2.WSGIApplication(
     [
-        ('/new/(.*)', NewRestPad),
         ('/pad/(.*)', GetRestPad),
+        ('/pdf/(.*)', GetPdfPad),
+        ('/new/(.*)', NewRestPad),
         ('/save/(.*)', SaveRestPad),
+        ('/list', ListAllPads),
         ('/pad_revisions/(.*)', ListRevisions),
-        ('/pdf/(.*)', GetPdfPad)
+
     ],
     debug=True))
 
