@@ -1,4 +1,7 @@
 {%extends 'base.html'%}
 {%block body%}
-    <a href="/list">List all pads</a><br/>
+<ul style="list-style:none">
+    <li><a href="/list">List all pads</a></li>
+    <li><label for="padname"><a onclick="window.location=\"/new/\" + $('.padname');return false;" href="#"> Create new pad </a></label><input type="text" name="padname" id="padname" /></li>
+</ul>
 {%endblock%}

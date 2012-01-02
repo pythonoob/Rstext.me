@@ -5,6 +5,7 @@
     TODO: Make the rst2pdf stuff.
 """
 from google.appengine.ext import db
+from google.appengine.api import users
 import webapp2, jinja2, os, logging, cgi
 from datetime import datetime
 from google.appengine.ext.webapp.util import run_wsgi_app
@@ -14,6 +15,8 @@ class Pad(db.Model):
         Collection of pad_revision objects under a same id (pad name)
     """
     pad_name = db.StringProperty()
+    is_private = db.BooleanProperty()
+    user = db.UserProperty()
 
 class PadRevision(db.Model):
     """
@@ -91,7 +94,7 @@ class PadHandler(webapp2.RequestHandler):
         if revision:
             return PadRevision.get_by_id(revision)
         else:
-            return parent_pad.revisions.order('pad_date').get()
+            return parent_pad.revisions.order('-pad_date').get()
 
 class NewRestPad(PadHandler):
     """
@@ -108,6 +111,10 @@ class NewRestPad(PadHandler):
         """
 
         pad = self.get_pad(name)
+        is_private = self.request.get('private')
+        if is_private == "":
+            is_private = True
+        pad.is_private = is_private
         pad.put() # Update pad.
 
         revision = PadRevision(pad = pad.key())
@@ -136,10 +143,17 @@ class GetRestPad(PadHandler):
             Gets pad body, renders template.
             If no path body present redirects to /new/padname
         """
-        try:
-            body = self.get_pad(name, revision).pad_text
+
+        pad = self.get_pad(name, revision)
+        parent_pad = self.get_pad(name, get_revision = False)
+        if parent_pad.is_private and\
+                not parent_pad.user == users.get_current_user():
             self.template('pad.html', {
-                 'body': body, 'messages': None, 'pad_id':name,
+                messages: 'You don\'t have access to this pad' })
+            return 
+        try:
+            self.template('pad.html', {
+                 'body': pad.pad_text, 'messages': None, 'pad_id':name,
                  'pad_name':name.replace('_', ' ')})
 
         except Exception, err:
@@ -151,14 +165,16 @@ class SaveRestPad(PadHandler):
     """
         Save a rest pad revision.
     """
-    def get(self, name):
+    def post(self, name):
+        if pad.is_private and not pad.user == users.get_current_user():
+            self.template('pad.html', {
+                messages: 'You don\'t have access to this pad' })
+            return 
         pad = self.get_pad(name, get_revision = False)
         revision = PadRevision(pad = pad)
         revision.pad_text = self.request.get('text')
-        logging.info("XXXXXXXXXXX")
-        logging.info(revision.pad_text)
         revision.put()
-        self.redirect('/pad/' + name + "/" + str(revision.key().id() ))
+        self.redirect('/pad/' + name)
 
 class ListRevisions(PadHandler):
     def get(self, name):
@@ -186,7 +202,7 @@ class GetHtmlPad(PadHandler):
             parts = publish_parts(source = self.get_pad(name).pad_text,
                 writer_name = 'html4css1',
                 settings_overrides={'style':'colorful', 'config': None})
-            return parts['fragment'] # TODO Still not working
+            return parts['whole'] # TODO Still not working
         except Exception, error:
             body = self.get_pad(name).pad_text
             self.template('pad.html', {

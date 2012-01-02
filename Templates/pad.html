@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 {% block body %}
-            <form action="/save/{{pad_id}}">
-                <textarea id="text" name="text">{{ body }}</textarea><br/>
-                <input type="submit" value="Save" />
-            </form>
-            <a href="/pad_revisions/{{pad_id}}"> See all revisions </a>
+    <form action="/save/{{pad_id}}" method="post">
+        <textarea id="text" name="text">{{ body }}</textarea><br/>
+        <input type="submit" value="Save" />
+    </form>
+    <ul class="pad_options">
+        <li><a href="/html/{{pad_id}}"> Render HTML </a></li>
+        <li><a href="/pad_revisions/{{pad_id}}"> See all revisions </a></li>
+    </ul>
 {% endblock %}
