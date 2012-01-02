@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/public/!svn/ver/3791/reportlab/trunk/src/reportlab/pdfgen
+END
+canvas.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/public/!svn/ver/3791/reportlab/trunk/src/reportlab/pdfgen/canvas.py
+END
+textobject.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/public/!svn/ver/3778/reportlab/trunk/src/reportlab/pdfgen/textobject.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/public/!svn/ver/3345/reportlab/trunk/src/reportlab/pdfgen/__init__.py
+END
+pdfimages.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/public/!svn/ver/3693/reportlab/trunk/src/reportlab/pdfgen/pdfimages.py
+END
+pdfgeom.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/public/!svn/ver/3266/reportlab/trunk/src/reportlab/pdfgen/pdfgeom.py
+END
+pathobject.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/public/!svn/ver/3343/reportlab/trunk/src/reportlab/pdfgen/pathobject.py
+END
+pycanvas.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/public/!svn/ver/3777/reportlab/trunk/src/reportlab/pdfgen/pycanvas.py
+END

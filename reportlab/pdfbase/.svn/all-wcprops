@@ -1,0 +1,203 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/public/!svn/ver/3807/reportlab/trunk/src/reportlab/pdfbase
+END
+_fontdata_widths_courierboldoblique.py
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_widths_courierboldoblique.py
+END
+rl_codecs.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/public/!svn/ver/3660/reportlab/trunk/src/reportlab/pdfbase/rl_codecs.py
+END
+pdfform.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/public/!svn/ver/3651/reportlab/trunk/src/reportlab/pdfbase/pdfform.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/public/!svn/ver/3345/reportlab/trunk/src/reportlab/pdfbase/__init__.py
+END
+_fontdata.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata.py
+END
+_fontdata_enc_macroman.py
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_enc_macroman.py
+END
+ttfonts.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/public/!svn/ver/3702/reportlab/trunk/src/reportlab/pdfbase/ttfonts.py
+END
+_fontdata_enc_pdfdoc.py
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_enc_pdfdoc.py
+END
+_fontdata_widths_helvetica.py
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_widths_helvetica.py
+END
+_fontdata_widths_symbol.py
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_widths_symbol.py
+END
+_fontdata_widths_helveticabold.py
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_widths_helveticabold.py
+END
+_fontdata_widths_courier.py
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_widths_courier.py
+END
+_fontdata_widths_courierbold.py
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_widths_courierbold.py
+END
+_fontdata_enc_zapfdingbats.py
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_enc_zapfdingbats.py
+END
+_fontdata_widths_timesbold.py
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_widths_timesbold.py
+END
+_fontdata_widths_helveticaoblique.py
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_widths_helveticaoblique.py
+END
+_can_cmap_data.py
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/public/!svn/ver/3710/reportlab/trunk/src/reportlab/pdfbase/_can_cmap_data.py
+END
+pdfutils.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/public/!svn/ver/3765/reportlab/trunk/src/reportlab/pdfbase/pdfutils.py
+END
+_fontdata_widths_courieroblique.py
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_widths_courieroblique.py
+END
+_fontdata_enc_macexpert.py
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_enc_macexpert.py
+END
+pdfdoc.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/public/!svn/ver/3807/reportlab/trunk/src/reportlab/pdfbase/pdfdoc.py
+END
+pdfmetrics.py
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/public/!svn/ver/3755/reportlab/trunk/src/reportlab/pdfbase/pdfmetrics.py
+END
+_fontdata_enc_standard.py
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_enc_standard.py
+END
+pdfpattern.py
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/public/!svn/ver/3651/reportlab/trunk/src/reportlab/pdfbase/pdfpattern.py
+END
+_fontdata_widths_timesitalic.py
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_widths_timesitalic.py
+END
+cidfonts.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/public/!svn/ver/3710/reportlab/trunk/src/reportlab/pdfbase/cidfonts.py
+END
+_fontdata_widths_timesbolditalic.py
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_widths_timesbolditalic.py
+END
+_fontdata_enc_symbol.py
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_enc_symbol.py
+END
+_fontdata_enc_winansi.py
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_enc_winansi.py
+END
+_fontdata_widths_zapfdingbats.py
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_widths_zapfdingbats.py
+END
+_fontdata_widths_timesroman.py
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_widths_timesroman.py
+END
+_cidfontdata.py
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/public/!svn/ver/3344/reportlab/trunk/src/reportlab/pdfbase/_cidfontdata.py
+END
+_fontdata_widths_helveticaboldoblique.py
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/public/!svn/ver/3666/reportlab/trunk/src/reportlab/pdfbase/_fontdata_widths_helveticaboldoblique.py
+END

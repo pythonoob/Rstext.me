@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/public/!svn/ver/3901/reportlab/trunk/src/reportlab
+END
+license.txt
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/public/!svn/ver/3270/reportlab/trunk/src/reportlab/license.txt
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/public/!svn/ver/3788/reportlab/trunk/src/reportlab/__init__.py
+END
+rl_config.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/public/!svn/ver/3793/reportlab/trunk/src/reportlab/rl_config.py
+END
+MANIFEST.in
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/public/!svn/ver/3266/reportlab/trunk/src/reportlab/MANIFEST.in
+END

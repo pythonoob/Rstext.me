@@ -1,0 +1,203 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/public/!svn/ver/3898/reportlab/trunk/src/reportlab/lib
+END
+pagesizes.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/public/!svn/ver/3266/reportlab/trunk/src/reportlab/lib/pagesizes.py
+END
+abag.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/public/!svn/ver/3623/reportlab/trunk/src/reportlab/lib/abag.py
+END
+fontfinder.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/public/!svn/ver/3660/reportlab/trunk/src/reportlab/lib/fontfinder.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/public/!svn/ver/3660/reportlab/trunk/src/reportlab/lib/__init__.py
+END
+testutils.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/public/!svn/ver/3662/reportlab/trunk/src/reportlab/lib/testutils.py
+END
+colors.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/public/!svn/ver/3880/reportlab/trunk/src/reportlab/lib/colors.py
+END
+attrmap.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/public/!svn/ver/3660/reportlab/trunk/src/reportlab/lib/attrmap.py
+END
+geomutils.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/public/!svn/ver/3355/reportlab/trunk/src/reportlab/lib/geomutils.py
+END
+extformat.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/public/!svn/ver/3665/reportlab/trunk/src/reportlab/lib/extformat.py
+END
+codecharts.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/public/!svn/ver/3342/reportlab/trunk/src/reportlab/lib/codecharts.py
+END
+logger.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/public/!svn/ver/3662/reportlab/trunk/src/reportlab/lib/logger.py
+END
+styles.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/public/!svn/ver/3880/reportlab/trunk/src/reportlab/lib/styles.py
+END
+normalDate.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/public/!svn/ver/3677/reportlab/trunk/src/reportlab/lib/normalDate.py
+END
+formatters.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/public/!svn/ver/3266/reportlab/trunk/src/reportlab/lib/formatters.py
+END
+pygments2xpre.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/public/!svn/ver/3898/reportlab/trunk/src/reportlab/lib/pygments2xpre.py
+END
+enums.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/public/!svn/ver/3342/reportlab/trunk/src/reportlab/lib/enums.py
+END
+fonts.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/public/!svn/ver/3702/reportlab/trunk/src/reportlab/lib/fonts.py
+END
+sequencer.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/public/!svn/ver/3817/reportlab/trunk/src/reportlab/lib/sequencer.py
+END
+utils.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/public/!svn/ver/3857/reportlab/trunk/src/reportlab/lib/utils.py
+END
+textsplit.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/public/!svn/ver/3887/reportlab/trunk/src/reportlab/lib/textsplit.py
+END
+boxstuff.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/public/!svn/ver/3408/reportlab/trunk/src/reportlab/lib/boxstuff.py
+END
+units.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/public/!svn/ver/3342/reportlab/trunk/src/reportlab/lib/units.py
+END
+yaml.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/public/!svn/ver/3660/reportlab/trunk/src/reportlab/lib/yaml.py
+END
+rltempfile.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/public/!svn/ver/3342/reportlab/trunk/src/reportlab/lib/rltempfile.py
+END
+corp.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/public/!svn/ver/3786/reportlab/trunk/src/reportlab/lib/corp.py
+END
+arciv.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/public/!svn/ver/3386/reportlab/trunk/src/reportlab/lib/arciv.py
+END
+validators.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/public/!svn/ver/3752/reportlab/trunk/src/reportlab/lib/validators.py
+END
+set_ops.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/public/!svn/ver/3342/reportlab/trunk/src/reportlab/lib/set_ops.py
+END
+rparsexml.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/public/!svn/ver/3660/reportlab/trunk/src/reportlab/lib/rparsexml.py
+END
+pdfencrypt.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/public/!svn/ver/3662/reportlab/trunk/src/reportlab/lib/pdfencrypt.py
+END
+randomtext.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/public/!svn/ver/3839/reportlab/trunk/src/reportlab/lib/randomtext.py
+END
+xmllib.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/public/!svn/ver/3660/reportlab/trunk/src/reportlab/lib/xmllib.py
+END
+PyFontify.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/public/!svn/ver/3660/reportlab/trunk/src/reportlab/lib/PyFontify.py
+END

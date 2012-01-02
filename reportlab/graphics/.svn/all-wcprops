@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/public/!svn/ver/3900/reportlab/trunk/src/reportlab/graphics
+END
+renderPDF.py
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/public/!svn/ver/3833/reportlab/trunk/src/reportlab/graphics/renderPDF.py
+END
+renderbase.py
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/public/!svn/ver/3719/reportlab/trunk/src/reportlab/graphics/renderbase.py
+END
+renderPM.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/public/!svn/ver/3833/reportlab/trunk/src/reportlab/graphics/renderPM.py
+END
+testdrawings.py
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/public/!svn/ver/3345/reportlab/trunk/src/reportlab/graphics/testdrawings.py
+END
+widgetbase.py
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/public/!svn/ver/3742/reportlab/trunk/src/reportlab/graphics/widgetbase.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/public/!svn/ver/3345/reportlab/trunk/src/reportlab/graphics/__init__.py
+END
+renderSVG.py
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/public/!svn/ver/3840/reportlab/trunk/src/reportlab/graphics/renderSVG.py
+END
+renderPS.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/public/!svn/ver/3840/reportlab/trunk/src/reportlab/graphics/renderPS.py
+END
+shapes.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/public/!svn/ver/3883/reportlab/trunk/src/reportlab/graphics/shapes.py
+END
+testshapes.py
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/public/!svn/ver/3840/reportlab/trunk/src/reportlab/graphics/testshapes.py
+END

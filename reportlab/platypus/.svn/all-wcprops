@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/public/!svn/ver/3901/reportlab/trunk/src/reportlab/platypus
+END
+tableofcontents.py
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/public/!svn/ver/3702/reportlab/trunk/src/reportlab/platypus/tableofcontents.py
+END
+tables.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/public/!svn/ver/3901/reportlab/trunk/src/reportlab/platypus/tables.py
+END
+frames.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/public/!svn/ver/3876/reportlab/trunk/src/reportlab/platypus/frames.py
+END
+flowables.py
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/public/!svn/ver/3884/reportlab/trunk/src/reportlab/platypus/flowables.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/public/!svn/ver/3817/reportlab/trunk/src/reportlab/platypus/__init__.py
+END
+paraparser.py
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/public/!svn/ver/3892/reportlab/trunk/src/reportlab/platypus/paraparser.py
+END
+doctemplate.py
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/public/!svn/ver/3868/reportlab/trunk/src/reportlab/platypus/doctemplate.py
+END
+para.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/public/!svn/ver/3702/reportlab/trunk/src/reportlab/platypus/para.py
+END
+figures.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/public/!svn/ver/3702/reportlab/trunk/src/reportlab/platypus/figures.py
+END
+xpreformatted.py
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/public/!svn/ver/3866/reportlab/trunk/src/reportlab/platypus/xpreformatted.py
+END
+paragraph.py
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/public/!svn/ver/3899/reportlab/trunk/src/reportlab/platypus/paragraph.py
+END
