@@ -219,7 +219,7 @@ class ListRevisions(PadHandler):
         body = create_ul(["<a href='/pad/%s/%s'>%s - %s</a>" %(pad.pad_name,
             padr.key().id(), pad.pad_name, padr.pad_date)\
             for padr in pad.revisions ])
-        self.template('pad_list.html', {'body': body,
+        self.template('pad_list.html', {'body': body, 'pad_id' : name,
             'messages': "Warning: This information may be changing right now"})
 
 class GetS5Pad(PadHandler):
