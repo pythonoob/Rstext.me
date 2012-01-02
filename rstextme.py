@@ -6,6 +6,7 @@
 """
 from google.appengine.ext import db
 import webapp2, jinja2, os, logging, cgi
+from datetime import datetime
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 class Pad(db.Model):
@@ -20,8 +21,12 @@ class PadRevision(db.Model):
         Identifies itself to pad as pad.revisions.
     """
     pad_text = db.StringProperty(multiline = True)
-    pad_date = db.DateProperty()
+    pad_date = db.DateTimeProperty(auto_now=True)
     pad = db.ReferenceProperty(Pad, collection_name = 'revisions')
+
+def create_ul(elements):
+    return "<ul>" + '\n'.join(["<li>%s</li>" %(element)\
+            for element in elements ]) + "</ul>"
 
 def get_template(template):
     """
@@ -113,7 +118,7 @@ class NewRestPad(PadHandler):
         revision.pad_text = "New pad %s\n ======================"\
              %(self.filter_name(name))
         revision.put()
-
+        logging.debug("Created new pad, redirecting.")
         self.redirect('/pad/' + name)
 
 class ListAllPads(PadHandler):
@@ -122,9 +127,9 @@ class ListAllPads(PadHandler):
     """
     def get(self):
         pads = self.list_pads()
-        for pad in self.list_pads():
-           self.response.out.write( "<li><a href='/pad/%s'>%s</a></li>"\
-               %(pad.pad_name, pad.pad_name))
+        body = create_ul(["<a href='/pad/%s'>%s</a>" %(pad.pad_name,
+            pad.pad_name) for pad in self.list_pads()])
+        self.template('pad_list.html', {'body': body, 'messages': None})
 
 class GetRestPad(PadHandler):
     """
@@ -142,6 +147,8 @@ class GetRestPad(PadHandler):
                  'pad_name':name.replace('_', ' ')})
 
         except Exception, err:
+            logging.debug("Something happend getting pad. Creating one")
+            logging.debug(err)
             self.redirect('/new/' + name)
 
 class SaveRestPad(PadHandler):
@@ -152,18 +159,19 @@ class SaveRestPad(PadHandler):
         pad = self.get_pad(name, get_revision = False)
         revision = PadRevision(pad = pad)
         revision.put()
-        self.redirect('/pad/' + name)
+        self.redirect('/pad/' + name + "/" + str(revision.key().id() ))
 
 class ListRevisions(PadHandler):
     def get(self, name):
         """
             Returns an unordered list of revisions of a pad.
         """
-        self.response.out.write("<ul>")
         pad = self.get_pad(name, get_revision = False)
-        for padr in pad.revisions:
-            self.response.out.write("<li>%s - %s</li>" %(pad.pad_name, padr.pad_date))
-        self.response.out.write("</ul>")
+        body = create_ul(["<a href='/pad/%s/%s'>%s - %s</a>" %(pad.pad_name,
+            padr.key().id(), pad.pad_name, padr.pad_date)\
+            for padr in pad.revisions ])
+        self.template('pad_list.html', {'body': body,
+            'messages': "Warning: This information may be changing right now"})
 
 class GetPdfPad(PadHandler):
     def get(self, name):
@@ -173,6 +181,10 @@ class GetPdfPad(PadHandler):
     def pdfy(self, name):
         return # TODO
 
+class Landing(PadHandler):
+    def get(self):
+        self.template('index.html', {})
+
 if __name__ == "__main__":
     jinja_loader = jinja2.FileSystemLoader(
         os.path.join(os.path.dirname(__file__), 'Templates'))
@@ -180,6 +192,8 @@ if __name__ == "__main__":
 
     run_wsgi_app(webapp2.WSGIApplication(
         [
+            ('/pad/(.*)/(.*)', GetRestPad),
+            ('/', Landing),
             ('/pad/(.*)', GetRestPad),
             ('/pdf/(.*)', GetPdfPad),
             ('/new/(.*)', NewRestPad),
