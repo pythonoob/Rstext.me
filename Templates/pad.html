@@ -7,18 +7,26 @@
 	<meta name="description" content="">
 	<meta name="author" content="David Francos Cuartero">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<link rel="stylesheet" href="css/style.css">
-	<script src="js/libs/modernizr-2.0.6.min.js"></script>
+	<link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/blueprint/screen.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="/css/blueprint/print.css" type="text/css" media="print">
+    <!--[if lt IE 8]>
+      <link rel="stylesheet" href="/css/blueprint/ie.css" type="text/css" media="screen, projection">
+    <![endif]-->
+	<script src="/js/libs/modernizr-2.0.6.min.js"></script>
 </head>
 
 <body>
 
     <div id="container">
 	    <header>
-
+        {% if messages %}<div class="error">{{messages}}</div>{%endif%}
     	</header>
-	    <div id="main" role="main">
-            {{ body }}
+        <div id="main" role="main">
+            <form action="/save/{{pad_id}}">
+                <textarea>{{ body }}</textarea>
+                <input type="submit" value="Save" />
+            </form>
 	    </div>
     	<footer>
     
@@ -26,9 +34,9 @@
     </div> <!--! end of #container -->
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')</script>
-    <script src="js/plugins.js"></script>
-    <script src="js/script.js"></script>
+    <script>window.jQuery || document.write('<script src="/js/libs/jquery-1.7.1.min.js"><\/script>')</script>
+    <script src="/js/plugins.js"></script>
+    <script src="/js/script.js"></script>
     <script>
     	var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']]; // Change UA-XXXXX-X to be your site's ID
     	(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;

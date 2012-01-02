@@ -2,20 +2,16 @@
 
 """
     Simple webapp2 piratepad-like rest editor with PDF exporting capabilities.
-    TODO: Make the templates
     TODO: Make the rst2pdf stuff.
 """
 from google.appengine.ext import db
 import webapp2, jinja2, os, logging, cgi
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-jinja_environment = jinja2.Environment( loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'Templates')))
-
 class Pad(db.Model):
     """
-        Collection of pad_revision objects
+        Collection of pad_revision objects under a same id (pad name)
     """
-
     pad_name = db.StringProperty()
 
 class PadRevision(db.Model):
@@ -65,9 +61,9 @@ class PadHandler(webapp2.RequestHandler):
         return cgi.escape(name.replace(' ', '_'))
 
     def list_pads(self):
-        return Pad.gql('').get()
+        return Pad.all()
 
-    def get_pad(self, name, revision=False):
+    def get_pad(self, name, revision = False, get_revision = True):
         """
             Returns pad revision
             @param name: Pad name (stripped)
@@ -78,6 +74,8 @@ class PadHandler(webapp2.RequestHandler):
 
         try:
             parent_pad = Pad.gql('where pad_name=:1', name).get()
+            if not get_revision:
+                return parent_pad
             revisions = parent_pad.revisions.get()
         except:
             return False            
@@ -123,7 +121,10 @@ class ListAllPads(PadHandler):
         Get a list of all created pads (like a TOC)
     """
     def get(self):
-        self.response.out.write(self.list_pads())
+        pads = self.list_pads()
+        for pad in self.list_pads():
+           self.response.out.write( "<li><a href='/pad/%s'>%s</a></li>"\
+               %(pad.pad_name, pad.pad_name))
 
 class GetRestPad(PadHandler):
     """
@@ -136,27 +137,33 @@ class GetRestPad(PadHandler):
         """
         try:
             body = self.get_pad(name, revision).pad_text
-            self.template('pad.html', {'body': body, 'messages': None})
+            self.template('pad.html', {
+                 'body': body, 'messages': None, 'pad_id':name,
+                 'pad_name':name.replace('_', ' ')})
+
         except Exception, err:
-            self.redirect('/new/%s', name)
+            self.redirect('/new/' + name)
 
 class SaveRestPad(PadHandler):
     """
         Save a rest pad revision.
     """
     def get(self, name):
-        PadRevision(pad = self.get_pad(name)) # Get lastest
-        #self.redirect('/pad/%s' %(name))
+        pad = self.get_pad(name, get_revision = False)
+        revision = PadRevision(pad = pad)
+        revision.put()
+        self.redirect('/pad/' + name)
 
 class ListRevisions(PadHandler):
     def get(self, name):
         """
             Returns an unordered list of revisions of a pad.
         """
-        self.out.write("<ul>")
-        for pad in self.get_pad(name).revisions:
-            self.out.write("<li>%s - %s</li>" %(pad.name, pad.date))
-        self.out.write("</ul>")
+        self.response.out.write("<ul>")
+        pad = self.get_pad(name, get_revision = False)
+        for padr in pad.revisions:
+            self.response.out.write("<li>%s - %s</li>" %(pad.pad_name, padr.pad_date))
+        self.response.out.write("</ul>")
 
 class GetPdfPad(PadHandler):
     def get(self, name):
@@ -166,15 +173,19 @@ class GetPdfPad(PadHandler):
     def pdfy(self, name):
         return # TODO
 
-run_wsgi_app(webapp2.WSGIApplication(
-    [
-        ('/pad/(.*)', GetRestPad),
-        ('/pdf/(.*)', GetPdfPad),
-        ('/new/(.*)', NewRestPad),
-        ('/save/(.*)', SaveRestPad),
-        ('/list', ListAllPads),
-        ('/pad_revisions/(.*)', ListRevisions),
+if __name__ == "__main__":
+    jinja_loader = jinja2.FileSystemLoader(
+        os.path.join(os.path.dirname(__file__), 'Templates'))
+    jinja_environment = jinja2.Environment( loader = jinja_loader )
 
-    ],
-    debug=True))
-
+    run_wsgi_app(webapp2.WSGIApplication(
+        [
+            ('/pad/(.*)', GetRestPad),
+            ('/pdf/(.*)', GetPdfPad),
+            ('/new/(.*)', NewRestPad),
+            ('/save/(.*)', SaveRestPad),
+            ('/list', ListAllPads),
+            ('/pad_revisions/(.*)', ListRevisions),
+    
+        ],
+        debug=True))
