@@ -1,4 +1,11 @@
 {% extends "base.html" %}
+{% block header %}
+<script type="text/javascript">
+    function get_s5(){
+        window.open('/s5/{{pad_id}}?theme=' + $('select#theme option:selected').val() )
+    }
+</script>
+{%endblock%}
 {% block body %}
 {% if pad_owner and pad_private %} <div class="notice"><p> This pad is private for {{ pad_owner }} </p></div> {%endif%}
     <div style="position:fixed; bottom:2px;  text-shadow:3px 3px 3px 3px grey; right:4px; font-size:1.3em; color:black;"> <a style="color:#808080; text-decoration:none" href="/">Back to mainpage</a></div>
@@ -7,9 +14,9 @@
         <div style="position:absolute; width:10%; right:0px; top:20%;">
             <ul class="pad_options" style="list-style:none">
                 <li><a target="_rendered{{pad_id}}" href="/html/{{pad_id}}"> HTML </a></li>
-                <li><a target="_rendered{{pad_id}}" onclick="window.open('/s5/{{pad_id}}?theme=' + $('select#theme option:selected').val() )" > Presentation </a></li>
+                <li><a target="_rendered{{pad_id}}" onclick="get_s5()" > Presentation </a></li>
                 <li>
-                <select id="theme">
+                <select id="theme" onchange="get_s5()">
                         <option value="default">Default</option>
                         <option value="small-white">Small white</option>
                         <option value="big-white">Big white</option>

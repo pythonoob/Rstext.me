@@ -18,8 +18,27 @@ providers = {
     'MySpace'  : 'myspace.com',
     'AOL'      : 'aol.com',
     'MyOpenID' : 'myopenid.com'
-    # add more here
 }
+
+default_text = """
+Presentation for %s
+----------------------------------------------------
+
+First slide
+============
+
+* Bullet points
+* Foo
+* And bar, indeed
+
+Second slide
+============
+
+| You can 
+| force new lines
+| like this
+
+"""
 
 class Pad(db.Model):
     """
@@ -50,7 +69,8 @@ def get_template(template):
 
 class PadHandler(webapp2.RequestHandler):
     """
-        RequestHandler class to add template and filter_name support
+        RequestHandler class to add template support, main pad
+        creation/getting and formatting for s5 and html
     """
     def template(self, template, values):
         """
@@ -63,23 +83,6 @@ class PadHandler(webapp2.RequestHandler):
             Renders a template
         """
         self.response.out.write(get_template(template).render(values))
-
-    def filter_name(self, name):
-        """
-            @param name: name to return filtered
-            @type name: string
-            @returns: string
-
-            Filters out special characters from a name
-
-            >>> PadHandler().filter_name('foo bar baz+stuff\'')
-            foo_bar_baz+stuff
-
-        """
-        return cgi.escape(name.replace(' ', '_'))
-
-    def list_pads(self):
-        return Pad.all()
 
     def get_pad(self, name, revision = False, get_revision = True):
         """
@@ -149,8 +152,7 @@ class NewRestPad(PadHandler):
         pad.put() # Update pad.
 
         revision = PadRevision(pad = pad.key())
-        revision.pad_text = "New pad %s\n======================"\
-             %(self.filter_name(name))
+        revision.pad_text = default_text %(cgi.escape(name))
         revision.put()
         logging.debug("Created new pad, redirecting.")
         self.redirect('/pad/' + name)
@@ -231,10 +233,13 @@ class GetPdfPad(PadHandler):
         return # TODO
 
 class Landing(PadHandler):
+    """
+        Index page
+    """
     def get(self):
         body = "<ul class='login'> "
         pads = create_ul(["<a href='/pad/%s'>%s</a>" %(pad.pad_name,
-            pad.pad_name) for pad in self.list_pads()])
+            pad.pad_name) for pad in Pad.all()[:10]])
         for name, uri in providers.items():
             body += '<li><a href="%s">%s</a></li>' % (
                 users.create_login_url(federated_identity=uri), name)

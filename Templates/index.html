@@ -8,8 +8,8 @@
 {%endblock%}
 
 {%block body%}
-{{ body }}
-<form action="#" onsubmit="create_pad(); return false;" class="box" style="background:none; width:30%">
+<div><p style="display:inline">Login with:</p> {{ body }}</div>
+<form action="#" onsubmit="create_pad(); return false;" class="box" style="background:none; width:40%; float:left">
     <fieldset>
         <legend>Create a new pad</legend>
         <div class="left">
@@ -24,7 +24,11 @@
         <input type="submit" style="margin-top:2.5em;" />
     </fieldset>
 </form>
-
-<div id="pad_list">{{pads}}</div>
+<div id="pad_list" class="box" style="background:none; max-width:30%; margin-right:40px; float:right;">
+    <fieldset>
+        <legend> Lastest pads </legend>
+        {{pads}}
+    </fieldset>
+</div>
 
 {%endblock%}

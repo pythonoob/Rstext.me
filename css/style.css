@@ -31,10 +31,11 @@ audio[controls], canvas, video { display: inline-block; *display: inline; *zoom:
 
 html { font-size: 100%; overflow-y: scroll; -webkit-overflow-scrolling: touch; -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
 
-body { margin: 0; font-size: 13px; line-height: 1.231; }
-
+body { margin: 0; font-size: 13px; line-height: 1.231; font-family:cabin!important; font-size:1em!important; background:rgba(0,0,0,0.1)!important; }
+a { color:#909090!important; }
 body, button, input, select, textarea { font-family: sans-serif; color: #222; }
-
+ul{ list-style:none!important;}
+ul.login{ display:inline; }
 /* 
  * These selection declarations have to be separate
  * No text-shadow: twitter.com/miketaylr/status/12228805301
@@ -202,11 +203,6 @@ table { border-collapse: collapse; border-spacing: 0; }
    ========================================================================== */
 
 .login li{ display:inline; margin-right:4px; }
-
-
-
-
-
 
 /* =============================================================================
    Non-semantic helper classes
