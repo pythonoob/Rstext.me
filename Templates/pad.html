@@ -1,12 +1,27 @@
 {% extends "base.html" %}
 {% block body %}
-    {% if pad_owner and pad_private %} <div class="notice"><p> This pad is private for {{ pad_owner }} </p></div> {%endif%}
+{% if pad_owner and pad_private %} <div class="notice"><p> This pad is private for {{ pad_owner }} </p></div> {%endif%}
+    <div style="position:fixed; bottom:2px;  text-shadow:3px 3px 3px 3px grey; right:4px; font-size:1.3em; color:black;"> <a style="color:#808080; text-decoration:none" href="/">Back to mainpage</a></div>
     <form action="/save/{{pad_id}}" method="post">
         <textarea id="text" name="text">{{ body }}</textarea><br/>
         <div style="position:absolute; width:10%; right:0px; top:20%;">
             <ul class="pad_options" style="list-style:none">
                 <li><a target="_rendered{{pad_id}}" href="/html/{{pad_id}}"> HTML </a></li>
-                <li><a target="_rendered{{pad_id}}" href="/s5/{{pad_id}}"> Presentation </a></li>
+                <li><a target="_rendered{{pad_id}}" onclick="window.open('/s5/{{pad_id}}?theme=' + $('select#theme option:selected').val() )" > Presentation </a></li>
+                <li>
+                <select id="theme">
+                        <option value="default">Default</option>
+                        <option value="small-white">Small white</option>
+                        <option value="big-white">Big white</option>
+                        <option value="small-black">Small Black</option>
+                        <option value="big-black">Big Black</option>
+                        <option value="default_gfx">Default GFX</option>
+                        <option value="advanced_gfx">Advanced GFX</option>
+                        <option value="scala_gfx">Scala GFX</option>
+                        <option value="school_gfx">School GFX</option>
+                        <option value="sunny_gfx">Sunny GFX</option>
+                    </select>
+                </li>
                 <li><a href="/pad_revisions/{{pad_id}}"> Old revisions </a></li>
             </ul>
             <input type="submit" value="Save" style="margin-left:15px" />

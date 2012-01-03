@@ -106,14 +106,14 @@ class PadHandler(webapp2.RequestHandler):
         else:
             return parent_pad.revisions.order('-pad_date').get()
 
-    def format_(self, name, writter):
+    def format_(self, name, writter, theme):
         os.environ['DOCUTILSCONFIG'] = ''
         messages = None
 
         try:
             parts = publish_parts(source = self.get_pad(name).pad_text,
                 writer_name = writter,
-                settings_overrides={'style':'colorful', 'config': None})
+                settings_overrides={'style':'colorful', 'config': None, 'theme': theme})
             return parts['whole'] # TODO Still not working
         except Exception, error:
             try:
@@ -155,16 +155,6 @@ class NewRestPad(PadHandler):
         logging.debug("Created new pad, redirecting.")
         self.redirect('/pad/' + name)
 
-class ListAllPads(PadHandler):
-    """
-        Get a list of all created pads (like a TOC)
-    """
-    def get(self):
-        pads = self.list_pads()
-        body = create_ul(["<a href='/pad/%s'>%s</a>" %(pad.pad_name,
-            pad.pad_name) for pad in self.list_pads()])
-        self.template('pad_list.html', {'body': body, 'messages': None})
-
 class GetRestPad(PadHandler):
     """
        Return an existing pad
@@ -179,7 +169,7 @@ class GetRestPad(PadHandler):
         if parent_pad.is_private and\
                 not parent_pad.user == users.get_current_user():
             logging.info("You cant access this pad")
-            self.template('pad.html', {
+            self.template('errors.html', {
                 'messages': 'You don\'t have access to this pad' })
             return
         try:
@@ -224,11 +214,13 @@ class ListRevisions(PadHandler):
 
 class GetS5Pad(PadHandler):
     def get(self, name):
-        self.response.out.write(self.format_(name, 's5_html'))
+        self.response.out.write(self.format_(name, 's5_html',
+            self.request.get('theme')))
 
 class GetHtmlPad(PadHandler):
     def get(self, name):
-        self.response.out.write(self.format_(name, 'html4css1'))
+        self.response.out.write(self.format_(name, 'html4css1',
+            self.request.get('theme')))
 
 class GetPdfPad(PadHandler):
     def get(self, name):
@@ -240,11 +232,13 @@ class GetPdfPad(PadHandler):
 
 class Landing(PadHandler):
     def get(self):
-        body = "<ul style='list-style:none'>"
+        body = "<ul class='login'> "
+        pads = create_ul(["<a href='/pad/%s'>%s</a>" %(pad.pad_name,
+            pad.pad_name) for pad in self.list_pads()])
         for name, uri in providers.items():
             body += '<li><a href="%s">%s</a></li>' % (
                 users.create_login_url(federated_identity=uri), name)
-        self.template('index.html', {'body': body + "</ul>"})
+        self.template('index.html', {'body': body + "</ul>", 'pads': pads})
 
 if __name__ == "__main__":
     jinja_loader = jinja2.FileSystemLoader(
@@ -261,7 +255,6 @@ if __name__ == "__main__":
             ('/s5/(.*)', GetS5Pad),
             ('/new/(.*)', NewRestPad),
             ('/save/(.*)', SaveRestPad),
-            ('/list', ListAllPads),
             ('/pad_revisions/(.*)', ListRevisions),
 
         ],

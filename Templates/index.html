@@ -2,27 +2,29 @@
 {%block header%}
     <script type="text/javascript">
         function create_pad(){
-            console.debug($('#padname').val() + "?is_private=" + $('#private').val());
              window.location="/new/" + $('#padname').val() + "?is_private=" + $('.private').val();
         }
     </script>
 {%endblock%}
 
 {%block body%}
-<ul style="list-style:none">
-    <li><a href="/list">List all pads</a></li>
-    <li>
-        <form action="#" onsubmit="create_pad(); return false;">
-            <ul style="list-style:none"><li>
-                <label for="padname">Create new pad</label>
-                <input type="text" name="padname" id="padname" />
-            </li><li>
-                <label for="private"> Mark as private </label>
-                <input type="checkbox" name="private" id="private" value="true" />
-            </li></ul>
-            <input type="submit" />
-        </form>
-    </li>
-</ul>
 {{ body }}
+<form action="#" onsubmit="create_pad(); return false;" class="box" style="background:none; width:30%">
+    <fieldset>
+        <legend>Create a new pad</legend>
+        <div class="left">
+            <label for="padname">Pad name: </label>
+            <input placeholder="Choose an original name!" required type="text" name="padname" id="padname" />
+        </div>
+
+        <div class="right" style="line-height:2.1em;">
+            <input type="checkbox" name="private" id="private" value="true" />
+            <label for="private"> Mark as private </label>
+        </div>
+        <input type="submit" style="margin-top:2.5em;" />
+    </fieldset>
+</form>
+
+<div id="pad_list">{{pads}}</div>
+
 {%endblock%}
